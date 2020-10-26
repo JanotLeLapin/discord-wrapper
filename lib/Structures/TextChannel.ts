@@ -5,6 +5,7 @@ const baseUrl = 'https://discord.com/api/channels/';
 import Bot from '../Bot/Bot';
 
 import Channel from './Channel';
+import Embed, { EmbedObject } from './Embed';
 import Message from './Message';
 
 export class TextChannelBase extends Channel {
@@ -20,10 +21,14 @@ export class TextChannelBase extends Channel {
      * @description Sends a message to the channel
      * @param {string} message The message to send
      */
-    send (message: string): Promise<Message> {
+    send (message: string | Embed | EmbedObject): Promise<Message> {
         return new Promise((resolve, reject) => {
+            let embed;
+            if (message instanceof Embed) embed = message.data;
+            else if (typeof message == 'object') embed = message;
             axios.post(baseUrl + this.id + '/messages', {
-                content: message,
+                content: embed ? null : message,
+                embed: embed ? embed : {},
             }, {
                 headers: {
                     Authorization: 'Bot ' + this.token,

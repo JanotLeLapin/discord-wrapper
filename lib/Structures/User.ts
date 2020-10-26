@@ -5,6 +5,8 @@ import Bot from '../Bot/Bot';
 import DMChannel from './DMChannel';
 import Message from './Message';
 
+import Embed, { EmbedObject } from './Embed';
+
 const baseUrl = 'https://discord.com/api/users/';
 
 type premiumType = 0 | 1 | 2;
@@ -57,7 +59,7 @@ export default class User {
      * @description Send a message to the user
      * @param {string} message The message to send
      */
-    send (message: string): Promise<Message> {
+    send (message: string | Embed | EmbedObject): Promise<Message> {
         return new Promise((resolve, reject) => {
             axios.post(baseUrl + '@me/channels', {
                 recipient_id: this.id,
