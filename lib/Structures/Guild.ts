@@ -108,9 +108,8 @@ export default class Guild {
         })
             .then(res => {
                 const channels: TextChannel[] = res.data;
-                channels.forEach(channel => {
-                    this.channels.push(new TextChannel(channel, bot, token));
-                });
+                channels.forEach(channel => this.channels.push(new TextChannel(channel, bot, token)));
+                
                 bot.guilds.push(this);
                 bot.emit('guildCreate', this);
             })
