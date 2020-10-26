@@ -5,7 +5,7 @@ import Guild from './Structures/Guild';
 import Channel from './Structures/Channel';
 import Message from './Structures/Message';
 
-export default {
+export {
     Bot,
     User,
     Guild,
