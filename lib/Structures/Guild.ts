@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import Bot from '../Bot/Bot';
 
+import Member from './Member';
 import TextChannel from './TextChannel';
 
 const baseUrl = 'https://discord.com/api/guilds/';
