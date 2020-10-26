@@ -4,6 +4,7 @@ import User from './Structures/User';
 import Guild from './Structures/Guild';
 import Channel from './Structures/Channel';
 import Message from './Structures/Message';
+import Embed from './Structures/Embed';
 
 export {
     Bot,
@@ -11,4 +12,5 @@ export {
     Guild,
     Channel,
     Message,
+    Embed,
 };
