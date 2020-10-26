@@ -10,6 +10,7 @@ var Guild = /** @class */ (function () {
     function Guild(data, bot, token) {
         var _this = this;
         this.channels = [];
+        this.members = [];
         this.patch = function (data) {
             var update = {};
             if (data.name)
@@ -69,16 +70,11 @@ var Guild = /** @class */ (function () {
         })
             .then(function (res) {
             var channels = res.data;
-            channels.forEach(function (channel) {
-                _this.channels.push(new TextChannel_1.default(channel, bot, token));
-            });
+            channels.forEach(function (channel) { return _this.channels.push(new TextChannel_1.default(channel, bot, token)); });
             bot.guilds.push(_this);
             bot.emit('guildCreate', _this);
         })
-            .catch(function (err) { return bot.emit('error', {
-            code: err.response.status,
-            message: err.response.statusText,
-        }); });
+            .catch(function (err) { return console.error(err.response); });
     }
     /**
      * @description The icon url obtained from the guild ID and icon hash

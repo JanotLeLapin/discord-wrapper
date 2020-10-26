@@ -1,4 +1,5 @@
 import Bot from '../Bot/Bot';
+import Member from './Member';
 import TextChannel from './TextChannel';
 declare type feature = 'INVITE_SPLASH' | 'VIP_REGIONS' | 'VANITY_URL' | 'VERIFIED' | 'PARTNERED' | 'COMMUNITY' | 'COMMERCE' | 'NEWS' | 'DISCOVERABLE' | 'FEATURABLE' | 'ANIMATED_ICON' | 'BANNER' | 'WELCOME_SCREEN_ENABLED';
 declare type verificationLevel = 0 | 1 | 2 | 3 | 4;
@@ -31,6 +32,7 @@ export default class Guild {
     mfaLevel: 0 | 1;
     explicitContentFilter: explicitContentFilter;
     maxPresences?: number;
+    members: Member[];
     maxMembers: number;
     vanityUrlCode?: string;
     premiumTier: 0 | 1 | 2 | 3;
