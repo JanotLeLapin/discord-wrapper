@@ -38,6 +38,27 @@ export class TextChannelBase extends Channel {
                 .catch(err => reject(err.response));
         })
     }
+
+    bulkDelete (amount: number): Promise<void> {
+        return new Promise((resolve, reject) => {
+            axios.get(baseUrl + this.id + '/messages?limit=' + amount, {
+                headers: {
+                    Authorization: 'Bot ' + this.token,
+                },
+            })
+                .then(res => axios.post(baseUrl + this.id + '/messages/bulk-delete', {
+                    messages: res.data.map((message: any) => message.id),
+                }, {
+                    headers: {
+                        Authorization: 'Bot ' + this.token,
+                    },
+                })
+                    .then(() => resolve())
+                    .catch(err => reject(err.response))
+                )
+                .catch(err => reject(err.response));
+        })
+    }
 }
 
 export default class TextChannel extends TextChannelBase {
