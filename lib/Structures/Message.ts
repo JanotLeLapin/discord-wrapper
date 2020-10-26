@@ -5,6 +5,8 @@ import Bot from '../Bot/Bot';
 import User from './User';
 import TextChannel from './TextChannel';
 
+import Embed, { EmbedObject } from './Embed';
+
 const baseUrl = 'https://discord.com/api/channels/';
 
 export interface Reaction {
@@ -85,12 +87,14 @@ export default class Message {
      * @description Replies to the message
      * @param {string} message The message to send
      */
-    reply (message: string): Promise<Message> {
+    reply (message: string | Embed | EmbedObject): Promise<Message> {
         return new Promise((resolve, reject) => {
+            let embed;
+            if (message instanceof Embed) embed = message.data;
+            else if (typeof message == 'object') embed = message;
             axios.post(baseUrl + this.channel.id + '/messages', {
-                content: message,
-                tts: false,
-                embed: {},
+                content: embed ? null : message,
+                embed: embed ? embed : {},
             }, {
                 headers: {
                     Authorization: 'Bot ' + this.token,
