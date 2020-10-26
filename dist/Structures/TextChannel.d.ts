@@ -1,5 +1,6 @@
 import Bot from '../Bot/Bot';
 import Channel from './Channel';
+import Embed, { EmbedObject } from './Embed';
 import Message from './Message';
 export declare class TextChannelBase extends Channel {
     lastMessageID: string;
@@ -8,7 +9,8 @@ export declare class TextChannelBase extends Channel {
      * @description Sends a message to the channel
      * @param {string} message The message to send
      */
-    send(message: string): Promise<Message>;
+    send(message: string | Embed | EmbedObject): Promise<Message>;
+    bulkDelete(amount: number): Promise<void>;
 }
 export default class TextChannel extends TextChannelBase {
     guildID: string;

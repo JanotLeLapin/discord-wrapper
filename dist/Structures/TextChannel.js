@@ -20,6 +20,7 @@ exports.TextChannelBase = void 0;
 var axios_1 = __importDefault(require("axios"));
 var baseUrl = 'https://discord.com/api/channels/';
 var Channel_1 = __importDefault(require("./Channel"));
+var Embed_1 = __importDefault(require("./Embed"));
 var Message_1 = __importDefault(require("./Message"));
 var TextChannelBase = /** @class */ (function (_super) {
     __extends(TextChannelBase, _super);
@@ -35,14 +36,40 @@ var TextChannelBase = /** @class */ (function (_super) {
     TextChannelBase.prototype.send = function (message) {
         var _this = this;
         return new Promise(function (resolve, reject) {
+            var embed;
+            if (message instanceof Embed_1.default)
+                embed = message.data;
+            else if (typeof message == 'object')
+                embed = message;
             axios_1.default.post(baseUrl + _this.id + '/messages', {
-                content: message,
+                content: embed ? null : message,
+                embed: embed ? embed : {},
             }, {
                 headers: {
                     Authorization: 'Bot ' + _this.token,
                 }
             })
                 .then(function (reply) { return resolve(new Message_1.default(reply.data, _this.b, _this.token)); })
+                .catch(function (err) { return reject(err.response); });
+        });
+    };
+    TextChannelBase.prototype.bulkDelete = function (amount) {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            axios_1.default.get(baseUrl + _this.id + '/messages?limit=' + amount, {
+                headers: {
+                    Authorization: 'Bot ' + _this.token,
+                },
+            })
+                .then(function (res) { return axios_1.default.post(baseUrl + _this.id + '/messages/bulk-delete', {
+                messages: res.data.map(function (message) { return message.id; }),
+            }, {
+                headers: {
+                    Authorization: 'Bot ' + _this.token,
+                },
+            })
+                .then(function () { return resolve(); })
+                .catch(function (err) { return reject(err.response); }); })
                 .catch(function (err) { return reject(err.response); });
         });
     };

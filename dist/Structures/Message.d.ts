@@ -1,6 +1,7 @@
 import Bot from '../Bot/Bot';
 import User from './User';
 import TextChannel from './TextChannel';
+import Embed, { EmbedObject } from './Embed';
 export interface Reaction {
     count: number;
     me: boolean;
@@ -39,7 +40,7 @@ export default class Message {
      * @description Replies to the message
      * @param {string} message The message to send
      */
-    reply(message: string): Promise<Message>;
+    reply(message: string | Embed | EmbedObject): Promise<Message>;
     /**
      * @description Deletes the message
      */

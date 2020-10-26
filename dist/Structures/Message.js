@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var User_1 = __importDefault(require("./User"));
 var TextChannel_1 = __importDefault(require("./TextChannel"));
+var Embed_1 = __importDefault(require("./Embed"));
 var baseUrl = 'https://discord.com/api/channels/';
 var Message = /** @class */ (function () {
     function Message(data, bot, token) {
@@ -48,10 +49,14 @@ var Message = /** @class */ (function () {
     Message.prototype.reply = function (message) {
         var _this = this;
         return new Promise(function (resolve, reject) {
+            var embed;
+            if (message instanceof Embed_1.default)
+                embed = message.data;
+            else if (typeof message == 'object')
+                embed = message;
             axios_1.default.post(baseUrl + _this.channel.id + '/messages', {
-                content: message,
-                tts: false,
-                embed: {},
+                content: embed ? null : message,
+                embed: embed ? embed : {},
             }, {
                 headers: {
                     Authorization: 'Bot ' + _this.token,
