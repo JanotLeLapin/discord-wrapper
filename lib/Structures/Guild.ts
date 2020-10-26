@@ -51,6 +51,7 @@ export default class Guild {
     mfaLevel:                    0 | 1;
     explicitContentFilter:       explicitContentFilter;
     maxPresences?:               number;
+    members:                     Member[] = [];
     maxMembers:                  number;
     vanityUrlCode?:              string;
     premiumTier:                 0 | 1 | 2 | 3;
