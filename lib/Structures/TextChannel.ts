@@ -35,7 +35,7 @@ export class TextChannelBase extends Channel {
                 }
             })
                 .then(reply => resolve(new Message(reply.data, this.b, this.token)))
-                .catch(err => reject(err.response));
+                .catch(err => reject(err.response || err));
         })
     }
 
@@ -54,9 +54,9 @@ export class TextChannelBase extends Channel {
                     },
                 })
                     .then(() => resolve())
-                    .catch(err => reject(err.response))
+                    .catch(err => reject(err.response || err))
                 )
-                .catch(err => reject(err.response));
+                .catch(err => reject(err.response || err));
         })
     }
 }
