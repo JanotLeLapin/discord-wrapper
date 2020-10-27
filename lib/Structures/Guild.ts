@@ -124,7 +124,8 @@ export default class Guild {
         return 'https://cdn.discordapp.com/icons/' + this.id + '/' + this.icon;
     }
 
-    private patch = (data: any) => {
+    private patch = (data: any): Promise<Guild> => {
+        return new Promise((resolve, reject) => {
         const update: any = {};
         if (data.name) update.name = data.name;
 
@@ -133,19 +134,25 @@ export default class Guild {
                 'Authorization': 'Bot ' + this.token,
             }
         })
-            .then(res => this.b.guilds[this.b.guilds.indexOf(this)] = res.data)
-            .catch(err => this.b.emit('error', {
-                code: err.response.status,
-                message: err.response.statusText,
-            }));
+                .then(res => {
+                    const guild = new Guild(res.data, this.b, this.token);
+                    this.b.guilds[this.b.guilds.indexOf(this)] = guild;
+                    resolve(guild);
+                })
+                .catch(err => reject(err.response || err));
+        });
     }
 
     /**
      * @description Update the guild's name
      * @param {string} name The new name for the guild
      */
-    setName (name: string) {
-        this.patch({ name });
+    setName (name: string): Promise<Guild> {
+        return new Promise((resolve, reject) => {
+            this.patch({ name })
+                .then(guild => resolve(guild))
+                .catch(err => reject(err));
+        });
     }
 
 }
