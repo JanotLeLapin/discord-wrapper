@@ -13,8 +13,8 @@ export interface Recipient {
 export default class DMChannel extends TextChannelBase {
     recipients:      Recipient[];
 
-    constructor (data: any, bot: Bot, token: string) {
-        super(data, bot, token);
+    constructor (data: any, bot: Bot) {
+        super(data, bot);
 
         this.recipients = data.recipients;
     }

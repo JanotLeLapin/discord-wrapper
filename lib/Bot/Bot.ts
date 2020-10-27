@@ -1,3 +1,4 @@
+import axios, { Method } from 'axios';
 import { client as WebSocketClient, connection } from 'websocket';
 import zlib from 'zlib';
 
@@ -6,7 +7,7 @@ import Guild from '../Structures/Guild';
 import Message from '../Structures/Message';
 
 interface Presence {
-    name: string;
+    name?: string;
     type?: 'playing' | 'streaming' | 'listening' | 'watching';
     status?: 'online' | 'dnd' | 'idle' | 'invisible' | 'offline';
 }
@@ -40,21 +41,22 @@ const handler = (data: any, bot: Bot, token: string, connection: connection) => 
     }
     switch (data.t) {
         case 'READY':
-            bot.user = new User(data.d.user, bot, token);
+            bot.user = new User(data.d.user, bot);
             return bot.emit('ready');
         case 'MESSAGE_CREATE':
-            new Message(data.d, bot, token);
+            new Message(data.d, bot);
             break;
         case 'GUILD_CREATE':
-            new Guild(data.d, bot, token);
+            new Guild(data.d, bot);
             break;
     }
 }
 
 export default class Bot {
     private connection?: connection;
+    token?: string;
 
-    user: User = new User({}, this, '');
+    user: User = new User({}, this);
 
     guilds: Guild[] = [];
 
@@ -65,6 +67,7 @@ export default class Bot {
     connect(token: string): Promise<void> {
         return new Promise((resolve, reject) => {
             if (this.connection) return reject('Already authenticated.');
+            this.token = token;
             const client = new WebSocketClient()
             client.connect('wss://gateway.discord.gg/?v=6&encoding=json');
             client.on('connect', connection => {
@@ -124,7 +127,7 @@ export default class Bot {
                 since: 0,
                 activities: [
                     {
-                        name: presence.name,
+                        name: presence.name || '',
                         type: ['playing', 'streaming', 'listening', 'watching'].indexOf(presence.type || 'playing') || 0,
                     },
                 ],
@@ -163,5 +166,20 @@ export default class Bot {
     emit<K extends keyof EventEmitter>(eventName: K, data?: EventEmitter[K]): void {
         if (!this.handlers[eventName]) this.handlers[eventName] = [];
         this.handlers[eventName].forEach((handler: any) => handler(data));
+    }
+
+    request(method: Method, url: string, data?: object): Promise<any> {
+        return new Promise((resolve, reject) => {
+            axios({
+                method,
+                url,
+                data,
+                headers: {
+                    Authorization: 'Bot ' + this.token,
+                },
+            })
+                .then(res => resolve(res.data))
+                .catch(err => reject(err.reponse || err));
+        });
     }
 }

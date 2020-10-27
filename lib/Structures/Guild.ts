@@ -25,8 +25,7 @@ type defaultMessageNotifications = 0 | 1;
 type explicitContentFilter = 0 | 1 | 2;
 
 export default class Guild {
-    protected b:      Bot;
-    protected token:  string;
+    protected b: Bot;
 
     id:                          string;
     name:                        string;
@@ -63,9 +62,8 @@ export default class Guild {
     publicUpdatesChannelId?:     string;
     aviable:                     boolean;
 
-    constructor (data: any, bot: Bot, token: string) {
+    constructor (data: any, bot: Bot) {
         this.b = bot;
-        this.token = token;
 
         this.id = data.id;
         this.name = data.name;
@@ -102,19 +100,14 @@ export default class Guild {
         if (data.unaviable) this.aviable = false;
         else this.aviable = true;
 
-        axios.get(baseUrl + this.id + '/channels', {
-            headers: {
-                Authorization: 'Bot ' + token,
-            }
-        })
+        bot.request('GET', baseUrl + this.id + '/channels')
             .then(res => {
-                const channels: TextChannel[] = res.data;
-                channels.forEach(channel => this.channels.push(new TextChannel(channel, bot, token)));
-                
+                const channels: TextChannel[] = res;
+                channels.forEach(channel => this.channels.push(new TextChannel(channel, bot)));
+
                 bot.guilds.push(this);
                 bot.emit('guildCreate', this);
-            })
-            .catch(err => { throw err.response || err });
+            });
     }
 
     /**
@@ -126,20 +119,16 @@ export default class Guild {
 
     private patch = (data: any): Promise<Guild> => {
         return new Promise((resolve, reject) => {
-        const update: any = {};
-        if (data.name) update.name = data.name;
+            const update: any = {};
+            if (data.name) update.name = data.name;
 
-        axios.patch(baseUrl + this.id, update, {
-            headers: {
-                'Authorization': 'Bot ' + this.token,
-            }
-        })
+            this.b.request('PATCH', this.id, update)
                 .then(res => {
-                    const guild = new Guild(res.data, this.b, this.token);
+                    const guild = new Guild(res, this.b);
                     this.b.guilds[this.b.guilds.indexOf(this)] = guild;
                     resolve(guild);
                 })
-                .catch(err => reject(err.response || err));
+                .catch(err => reject(err));
         });
     }
 

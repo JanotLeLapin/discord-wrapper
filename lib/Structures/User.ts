@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import Bot from '../Bot/Bot';
 
 import DMChannel from './DMChannel';
@@ -13,7 +11,6 @@ type premiumType = 0 | 1 | 2;
 
 export default class User {
     protected b:     Bot;
-    protected token: string;
 
     id:            string;
     username:      string;
@@ -29,9 +26,8 @@ export default class User {
     premiumType?:  premiumType;
     publicFlags?:  number;
 
-    constructor (data: any, bot: Bot, token: string) {
+    constructor (data: any, bot: Bot) {
         this.b = bot;
-        this.token = token;
 
         this.id = data.id;
         this.username = data.username;
@@ -61,19 +57,15 @@ export default class User {
      */
     send (message: string | Embed | EmbedObject): Promise<Message> {
         return new Promise((resolve, reject) => {
-            axios.post(baseUrl + '@me/channels', {
+            this.b.request('POST', baseUrl + '@me/channels', {
                 recipient_id: this.id,
-            }, {
-                headers: {
-                    Authorization: 'Bot ' + this.token,
-                },
             })
                 .then(dm => {
-                    new DMChannel(dm.data, this.b, this.token).send(message)
+                    new DMChannel(dm, this.b).send(message)
                         .then(reply => resolve(reply))
-                        .catch(err => reject(err.response || err));
+                        .catch(err => reject(err));
                 })
-                .catch(err => reject(err.response || err));
+                .catch(err => reject(err));
         });
     }
 }

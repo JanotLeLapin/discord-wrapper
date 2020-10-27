@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import Bot from '../Bot/Bot';
 
 import User from './User';
@@ -29,7 +27,6 @@ export interface CrosspostMessage {
 
 export default class Message {
     protected b:     Bot;
-    protected token: string;
 
     reactions:        Reaction[];
     attachments:      any[];
@@ -48,9 +45,8 @@ export default class Message {
     type:             number;
     messageReference: CrosspostMessage;
 
-    constructor (data: any, bot: Bot, token: string) {
+    constructor (data: any, bot: Bot) {
         this.b = bot;
-        this.token = token;
 
         this.reactions = data.reactions;
         this.attachments = data.attachments;
@@ -60,26 +56,20 @@ export default class Message {
         this.mentionEveryone = data.mention_everyone;
         this.id = data.id;
         this.pinned = data.pinned;
-        this.author = new User(data.author, bot, token);
+        this.author = new User(data.author, bot);
         this.mentionRoles = data.mention_roles;
         this.content = data.content;
-        this.channel = new TextChannel({ id: data.channel_id }, bot, token);
+        this.channel = new TextChannel({ id: data.channel_id }, bot);
         this.mentions = data.mentions;
         this.type = data.type;
         this.messageReference = data.message_reference || {};
 
-        axios.get(baseUrl + this.channel.id, {
-            headers: {
-                Authorization: 'Bot ' + token,
-            },
-        })
+        bot.request('GET', baseUrl + this.channel.id)
             .then(channel => {
-                this.channel = new TextChannel(channel.data, bot, token);
+                this.channel = new TextChannel(channel, bot);
                 bot.emit('message', this);
             })
-            .catch(err => {
-                throw err;
-            });
+            .catch(err => { throw err });
     }
 
     /**
@@ -91,16 +81,13 @@ export default class Message {
             let embed;
             if (message instanceof Embed) embed = message.data;
             else if (typeof message == 'object') embed = message;
-            axios.post(baseUrl + this.channel.id + '/messages', {
+
+            this.b.request('POST', baseUrl + this.channel.id + '/messages', {
                 content: embed ? null : message,
-                embed: embed ? embed : {},
-            }, {
-                headers: {
-                    Authorization: 'Bot ' + this.token,
-                },
+                embed: embed ? embed : null,
             })
-                .then(reply => resolve(new Message(reply.data, this.b, this.token)))
-                .catch(err => reject(err.response || err));
+                .then(reply => resolve(new Message(reply, this.b)))
+                .catch(err => reject(err));
         })
     }
 
@@ -109,13 +96,9 @@ export default class Message {
      */
     delete (): Promise<void> {
         return new Promise((resolve, reject) => {
-            axios.delete(baseUrl + this.channel.id + '/messages/' + this.id, {
-                headers: {
-                    Authorization: 'Bot ' + this.token,
-                },
-            })
+            this.b.request('DELETE', baseUrl + this.channel.id + '/messages/' + this.id)
                 .then(() => resolve())
-                .catch(err => reject(err.response));
+                .catch(err => reject(err));
         })
     }
 }

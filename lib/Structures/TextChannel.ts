@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 const baseUrl = 'https://discord.com/api/channels/';
 
 import Bot from '../Bot/Bot';
@@ -11,8 +9,8 @@ import Message from './Message';
 export class TextChannelBase extends Channel {
     lastMessageID: string;
 
-    constructor (data: any, bot: Bot, token: string) {
-        super(data, bot, token);
+    constructor (data: any, bot: Bot) {
+        super(data, bot);
 
         this.lastMessageID = data.last_message_id;
     }
@@ -26,37 +24,24 @@ export class TextChannelBase extends Channel {
             let embed;
             if (message instanceof Embed) embed = message.data;
             else if (typeof message == 'object') embed = message;
-            axios.post(baseUrl + this.id + '/messages', {
+            this.b.request('POST', baseUrl + this.id + '/messages', {
                 content: embed ? null : message,
-                embed: embed ? embed : {},
-            }, {
-                headers: {
-                    Authorization: 'Bot ' + this.token,
-                }
+                embed: embed ? embed: null,
             })
-                .then(reply => resolve(new Message(reply.data, this.b, this.token)))
-                .catch(err => reject(err.response || err));
+                .then(reply => resolve(new Message(reply, this.b)))
+                .catch(err => reject(err));
         })
     }
 
     bulkDelete (amount: number): Promise<void> {
         return new Promise((resolve, reject) => {
-            axios.get(baseUrl + this.id + '/messages?limit=' + amount, {
-                headers: {
-                    Authorization: 'Bot ' + this.token,
-                },
-            })
-                .then(res => axios.post(baseUrl + this.id + '/messages/bulk-delete', {
-                    messages: res.data.map((message: any) => message.id),
-                }, {
-                    headers: {
-                        Authorization: 'Bot ' + this.token,
-                    },
+            this.b.request('GET', baseUrl + this.id + '/messages?limit=' + amount)
+                .then(res => this.b.request('POST', baseUrl + this.id + '/messages/bulk-delete', {
+                    message: res.map((message: any) => message.id),
                 })
                     .then(() => resolve())
-                    .catch(err => reject(err.response || err))
-                )
-                .catch(err => reject(err.response || err));
+                    .catch(err => reject(err)))
+                .catch(err => reject(err));
         })
     }
 }
@@ -71,8 +56,8 @@ export default class TextChannel extends TextChannelBase {
     topic:                string;
     parentID:             string;
 
-    constructor (data: any, bot: Bot, token: string) {
-        super(data, bot, token);
+    constructor (data: any, bot: Bot) {
+        super(data, bot);
 
         this.guildID = data.guild_id;
         this.name = data.name;
