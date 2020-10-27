@@ -179,7 +179,7 @@ export default class Bot {
                 },
             })
                 .then(res => resolve(res.data))
-                .catch(err => reject(err.reponse || err));
+                .catch(err => reject(err.response || err));
         });
     }
 }
