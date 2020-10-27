@@ -77,10 +77,9 @@ export default class Message {
                 this.channel = new TextChannel(channel.data, bot, token);
                 bot.emit('message', this);
             })
-            .catch(err => this.b.emit('error', {
-                code: err.response.status,
-                message: err.response.statusText,
-            }));
+            .catch(err => {
+                throw err;
+            });
     }
 
     /**
@@ -101,7 +100,7 @@ export default class Message {
                 },
             })
                 .then(reply => resolve(new Message(reply.data, this.b, this.token)))
-                .catch(err => reject(err.response));
+                .catch(err => reject(err.response || err));
         })
     }
 
