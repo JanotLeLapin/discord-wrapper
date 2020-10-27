@@ -33,11 +33,15 @@ export class TextChannelBase extends Channel {
         })
     }
 
+    /**
+     * @description Removes messages from the channel
+     * @param {number} amount The amount of messages to delete
+     */
     bulkDelete (amount: number): Promise<void> {
         return new Promise((resolve, reject) => {
             this.b.request('GET', baseUrl + this.id + '/messages?limit=' + amount)
                 .then(res => this.b.request('POST', baseUrl + this.id + '/messages/bulk-delete', {
-                    message: res.map((message: any) => message.id),
+                    messages: res.map((message: any) => message.id),
                 })
                     .then(() => resolve())
                     .catch(err => reject(err)))
