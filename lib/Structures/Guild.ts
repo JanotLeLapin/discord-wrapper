@@ -114,7 +114,7 @@ export default class Guild {
                 bot.guilds.push(this);
                 bot.emit('guildCreate', this);
             })
-            .catch(err => console.error(err.response));
+            .catch(err => { throw err.response || err });
     }
 
     /**
