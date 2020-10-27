@@ -71,9 +71,9 @@ export default class User {
                 .then(dm => {
                     new DMChannel(dm.data, this.b, this.token).send(message)
                         .then(reply => resolve(reply))
-                        .catch(err => reject(err.response));
+                        .catch(err => reject(err.response || err));
                 })
-                .catch(err => reject(err));
+                .catch(err => reject(err.response || err));
         });
     }
 }
