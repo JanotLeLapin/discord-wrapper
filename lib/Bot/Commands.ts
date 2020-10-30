@@ -41,7 +41,7 @@ interface options {
     permMessage?:    string;
 }
 
-type command = (bot: Bot, message: Message, args: string[]) => void;
+type command = (message: Message, args: string[]) => void;
 
 export default class Commands {
     commands: Command[] = [];
@@ -69,7 +69,7 @@ class Command {
         this.command = command;
     }
 
-    run (bot: Bot, message: Message, args: string[]) {
-        this.command(bot, message, args);
+    run (message: Message, args: string[]) {
+        this.command(message, args);
     }
 }

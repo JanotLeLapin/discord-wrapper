@@ -77,7 +77,7 @@ export default class Message {
                             const args = this.content.split(' ');
                             const command = args.shift()?.substring(1);
                             const cmd = bot.commands.commands.find(c => c.options.name === command);
-                            if (cmd) cmd.run(bot, this, args);
+                            if (cmd) cmd.run(this, args);
                         }
                 bot.emit('message', this);
             })
