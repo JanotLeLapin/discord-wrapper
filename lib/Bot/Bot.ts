@@ -104,9 +104,21 @@ export default class Bot {
                     }
                 });
                 connection.on('close', (code, desc) => {
-                    this.emit('error', {
-                        code,
-                        message: desc, 
+                    connection.close();
+                    this.connect(token)
+                        .then(() => {
+                            connection.send(JSON.stringify({
+                                op: 6,
+                                d: {
+                                    token,
+                                    session_id: this.ses,
+                                    seq: this.seq,
+                                }
+                            }));
+                        })
+                        .catch(err => {
+                            return reject(err);
+                        });
                     });
                 });
             });
