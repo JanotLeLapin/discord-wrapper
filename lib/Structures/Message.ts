@@ -4,6 +4,7 @@ import User from './User';
 import TextChannel from './TextChannel';
 
 import Embed, { EmbedObject } from './Embed';
+import Member from './Member';
 
 const baseUrl = 'https://discord.com/api/channels/';
 
@@ -38,6 +39,7 @@ export default class Message {
     pinned:           boolean;
     editedTimestamp:  any;
     author:           User;
+    member:           Member;
     mentionRoles:     any[];
     content:          string;
     channel:          TextChannel;
@@ -57,6 +59,7 @@ export default class Message {
         this.id = data.id;
         this.pinned = data.pinned;
         this.author = new User(data.author, bot);
+        this.member = new Member({ id: this.author.id }, bot);
         this.mentionRoles = data.mention_roles;
         this.content = data.content;
         this.channel = new TextChannel({ id: data.channel_id }, bot);
@@ -67,7 +70,12 @@ export default class Message {
         bot.request('GET', baseUrl + this.channel.id)
             .then(channel => {
                 this.channel = new TextChannel(channel, bot);
+                bot.request('GET', 'https://discord.com/api/guilds/' + this.channel.guildID + '/members/' + this.author.id)
+                    .then(member => {
+                        this.member = new Member(member, bot);
                 bot.emit('message', this);
+            })
+            .catch(err => { throw err });
             })
             .catch(err => { throw err });
     }
