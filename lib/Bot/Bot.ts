@@ -2,6 +2,8 @@ import axios, { Method } from 'axios';
 import { client as WebSocketClient, connection } from 'websocket';
 import zlib from 'zlib';
 
+import Commands from './Commands';
+
 import User from '../Structures/User';
 import Guild from '../Structures/Guild';
 import Message from '../Structures/Message';
@@ -30,24 +32,36 @@ interface Error {
     message: string;
 }
 
-let seq: number | null = null;
-const handler = (data: any, bot: Bot, token: string, connection: connection) => {
-    seq = data.s || null;
-    if (data.op == 10) {
-        setInterval(() => connection.send(JSON.stringify({
+export default class Bot {
+    private connection?: connection;
+    token?: string;
+
+    commands = new Commands();
+
+    user: User = new User({}, this);
+    guilds: Guild[] = [];
+
+    private seq: number | null = null;
+    private ses: string | null = null;
+    private interval: any = undefined;
+    private handler = (data: any) => {
+        this.seq = data.s || null;
+        if (data.op == 10 && !this.interval) {
+            this.interval = setInterval(() => this.connection?.send(JSON.stringify({
             op: 1,
-            d: seq,
+                d: this.seq,
         })), data.d.heartbeat_interval);
     }
     switch (data.t) {
         case 'READY':
-            bot.user = new User(data.d.user, bot);
-            return bot.emit('ready');
+                this.user = new User(data.d.user, this);
+                this.ses = data.d.session_id;
+                return this.emit('ready');
         case 'MESSAGE_CREATE':
-            new Message(data.d, bot);
+                new Message(data.d, this);
             break;
         case 'GUILD_CREATE':
-            new Guild(data.d, bot);
+                new Guild(data.d, this);
             break;
     }
 }
@@ -91,15 +105,15 @@ export default class Bot {
                 connection.on('message', data => {
                     if (data.utf8Data) {
                         const res: any = JSON.parse(data.utf8Data);
-                        handler(res, this, token, connection);
-                        if (res.t === 'READY') resolve();
+                        this.handler(res);
+                        if (res.t === 'READY') return resolve();
                     }
                     if (data.binaryData) {
                         zlib.unzip(data.binaryData, (err, buffer) => {
                             if (err) return reject(err);
                             const res: any = JSON.parse(buffer.toString('utf-8'));
-                            handler(res, this, token, connection);
-                            if (res.t === 'READY') resolve();
+                            this.handler(res);
+                            if (res.t === 'READY') return resolve();
                         });
                     }
                 });
