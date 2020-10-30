@@ -48,31 +48,23 @@ export default class Bot {
         this.seq = data.s || null;
         if (data.op == 10 && !this.interval) {
             this.interval = setInterval(() => this.connection?.send(JSON.stringify({
-            op: 1,
+                op: 1,
                 d: this.seq,
-        })), data.d.heartbeat_interval);
-    }
-    switch (data.t) {
-        case 'READY':
+            })), data.d.heartbeat_interval);
+        }
+        switch (data.t) {
+            case 'READY':
                 this.user = new User(data.d.user, this);
                 this.ses = data.d.session_id;
                 return this.emit('ready');
-        case 'MESSAGE_CREATE':
+            case 'MESSAGE_CREATE':
                 new Message(data.d, this);
-            break;
-        case 'GUILD_CREATE':
+                break;
+            case 'GUILD_CREATE':
                 new Guild(data.d, this);
-            break;
+                break;
+        }
     }
-}
-
-export default class Bot {
-    private connection?: connection;
-    token?: string;
-
-    user: User = new User({}, this);
-
-    guilds: Guild[] = [];
 
     /**
      * @description Connects the bot
@@ -133,10 +125,9 @@ export default class Bot {
                         .catch(err => {
                             return reject(err);
                         });
-                    });
                 });
             });
-        })
+        });
     }
 
     /**
