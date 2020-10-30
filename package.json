@@ -8,7 +8,7 @@
   "author": "JanotLeLapin <joseph300905@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "node dist/index.test.js"
+    "test": "nodemon dist/index.test.js"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
