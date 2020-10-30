@@ -73,6 +73,12 @@ export default class Message {
                 bot.request('GET', 'https://discord.com/api/guilds/' + this.channel.guildID + '/members/' + this.author.id)
                     .then(member => {
                         this.member = new Member(member, bot);
+                        if (bot.commands.commands.map(c => c.options.prefix).includes(this.content.split('').shift() || '')) {
+                            const args = this.content.split(' ');
+                            const command = args.shift()?.substring(1);
+                            const cmd = bot.commands.commands.find(c => c.options.name === command);
+                            if (cmd) cmd.run(bot, this, args);
+                        }
                 bot.emit('message', this);
             })
             .catch(err => { throw err });
