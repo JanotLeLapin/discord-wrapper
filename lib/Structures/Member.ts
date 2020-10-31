@@ -29,7 +29,8 @@ export default class Member {
         this.premiumSince = new Date(data.premium_since);
         this.deaf = data.deaf;
         this.mute = data.mute;
-        this.roles.forEach(role => role.permissions.forEach(permission => {
+        if (this.user?.id === guild?.ownerID) permissions.forEach(permission => this.permissions.push(permission));
+        else this.roles.forEach(role => role.permissions.forEach(permission => {
             if (this.permissions.indexOf(permission) === -1) this.permissions.push(permission);
         }));
     }
