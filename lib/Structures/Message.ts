@@ -43,7 +43,6 @@ export default class Message {
     member:           Member;
     mentionRoles:     any[];
     content:          string;
-    channel:          TextChannel;
     mentions:         any[];
     type:             number;
     messageReference: CrosspostMessage;
