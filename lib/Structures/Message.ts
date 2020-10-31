@@ -79,9 +79,9 @@ export default class Message {
                             const cmd = bot.commands.commands.find(c => c.options.name === command);
                             if (cmd) cmd.run(this, args);
                         }
-                bot.emit('message', this);
-            })
-            .catch(err => { throw err });
+                        bot.emit('message', this);
+                    })
+                    .catch(err => { throw err });
             })
             .catch(err => { throw err });
     }
