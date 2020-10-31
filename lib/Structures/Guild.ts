@@ -46,7 +46,7 @@ export default class Guild {
     widgetEnabled:               boolean;
     widgetChannelID?:            string;
     verificationLevel:           verificationLevel;
-    roles:                       any[];
+    roles:                       Role[] = [];
     defaultMessageNotifications: defaultMessageNotifications;
     mfaLevel:                    0 | 1;
     explicitContentFilter:       explicitContentFilter;
