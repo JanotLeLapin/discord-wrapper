@@ -1,6 +1,7 @@
 import Bot from '../Bot/Bot';
 
 import Member from './Member';
+import Role from './Role';
 import TextChannel from './TextChannel';
 
 const baseUrl = 'https://discord.com/api/guilds/';
