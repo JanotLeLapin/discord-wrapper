@@ -94,6 +94,22 @@ export default class Role {
             }
         }
     }
+
+    private patch = (data: any): Promise<Role> => {
+        return new Promise((resolve, reject) => {
+            const update: any = {};
+            if (data.name) update.name = data.name;
+            if (data.color) update.color = data.color;
+
+            this.b.request('PATCH', baseUrl + this.guild?.id + '/roles/' + this.id, update)
+                .then(res => {
+                    const role = new Role(res, this.guild, this.b); 
+                    resolve(role);
+                })
+                .catch(err => reject(err));
+        });
+    }
+
     /**
      * @description Update the role's name
      * @param {string} name The new name for the role
