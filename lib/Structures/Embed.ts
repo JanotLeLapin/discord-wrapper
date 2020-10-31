@@ -19,7 +19,7 @@ export interface EmbedObject {
     title?:       string;
     description?: string;
     url?:         string;
-    color?:       number;
+    color?:       string | number;
     fields?:      Field[];
     footer?:      Footer;
     author?:      Author;
@@ -64,7 +64,7 @@ export default class Embed {
      * @description Update the embed's color
      * @param {number} color The new color for the embed, as an integer color code
      */
-    setColor(color: number) {
+    setColor(color: string) {
         this.data.color = color;
         return this;
     }
