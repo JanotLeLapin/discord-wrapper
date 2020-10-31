@@ -94,4 +94,16 @@ export default class Role {
             }
         }
     }
+    /**
+     * @description Update the role's name
+     * @param {string} name The new name for the role
+     */
+    rename (name: string): Promise<Role> {
+        return new Promise((resolve, reject) => {
+            this.patch({ name })
+                .then(role => resolve(role))
+                .catch(err => reject(err));
+        });
+    }
+
 }
