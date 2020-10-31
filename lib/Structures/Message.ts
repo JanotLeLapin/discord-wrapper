@@ -38,6 +38,7 @@ export default class Message {
     id:               string;
     pinned:           boolean;
     editedTimestamp:  any;
+    channel:          TextChannel;
     author:           User;
     member:           Member;
     mentionRoles:     any[];
