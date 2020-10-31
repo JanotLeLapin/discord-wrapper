@@ -2,7 +2,7 @@ import Bot from '../Bot/Bot';
 
 import User from './User';
 import Guild from './Guild';
-import Role, { permission } from './Role';
+const baseUrl = 'https://discord.com/api/guilds/';
 
 export default class Member {
     private b: Bot;
