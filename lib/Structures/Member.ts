@@ -2,6 +2,7 @@ import Bot from '../Bot/Bot';
 
 import User from './User';
 import Guild from './Guild';
+import Role, { permission } from './Role';
 
 export default class Member {
     private b: Bot;
@@ -13,6 +14,7 @@ export default class Member {
     premiumSince?: Date;
     deaf:          boolean;
     mute:          boolean;
+    permissions:   permission[] = [];
 
     constructor (data: any, guild: Guild | undefined, bot: Bot) {
         this.b = bot;
@@ -24,6 +26,9 @@ export default class Member {
         this.premiumSince = new Date(data.premium_since);
         this.deaf = data.deaf;
         this.mute = data.mute;
+        this.roles.forEach(role => role.permissions.forEach(permission => {
+            if (this.permissions.indexOf(permission) === -1) this.permissions.push(permission);
+        }));
     }
 
     /**
