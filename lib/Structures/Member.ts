@@ -50,9 +50,7 @@ export default class Member {
         return new Promise((resolve, reject) => {
             const update: any = {};
             if (data.nick) update.nick = data.nick;
-            console.log(update);
 
-            console.log();
             this.b.request('PATCH', baseUrl + this.guild?.id + '/members/' + this.user?.id, update)
                 .then(() => resolve())
                 .catch(err => reject(err));
