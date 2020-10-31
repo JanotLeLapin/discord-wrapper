@@ -2,6 +2,8 @@ import Bot from '../Bot/Bot';
 
 import User from './User';
 import Guild from './Guild';
+import Role, { permission, permissions } from './Role';
+
 const baseUrl = 'https://discord.com/api/guilds/';
 
 export default class Member {
