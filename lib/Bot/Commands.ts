@@ -70,6 +70,11 @@ class Command {
     }
 
     run (message: Message, args: string[]) {
+        if (this.options.permissions) {
+            for (let i = 0; i < this.options.permissions.length; i++) {
+                if (!message.member.permissions.includes(this.options.permissions[i])) return message.reply(this.options.permMessage || 'You need the following permission' + (this.options.permissions.length > 1 ? 's' : '') + ' to run this command: ' + this.options.permissions.filter(p => !message.member.permissions.includes(p)).join(', ').toLowerCase().split('_').join(' ') + '.');
+            }
+        }
         this.command(message, args);
     }
 }
