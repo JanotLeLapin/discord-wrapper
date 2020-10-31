@@ -137,7 +137,7 @@ export default class Guild {
      * @description Update the guild's name
      * @param {string} name The new name for the guild
      */
-    setName (name: string): Promise<Guild> {
+    rename (name: string): Promise<Guild> {
         return new Promise((resolve, reject) => {
             this.patch({ name })
                 .then(guild => resolve(guild))
