@@ -9,7 +9,7 @@ export default class Member {
 
     user?:         User;
     nick?:         string;
-    roles:         any[];
+    roles:         Role[] = [];
     joinedAt:      Date;
     premiumSince?: Date;
     deaf:          boolean;
@@ -21,7 +21,10 @@ export default class Member {
 
         this.user = data.user ? new User(data.user, bot) : undefined;
         this.nick = data.nick;
-        this.roles = data.roles;
+        if (data.roles) data.roles.forEach((roleID: any) => {
+            const role = guild?.roles.find(r => r.id === roleID);
+            if (role) this.roles.push(role);
+        });
         this.joinedAt = new Date(data.joined_at);
         this.premiumSince = new Date(data.premium_since);
         this.deaf = data.deaf;
