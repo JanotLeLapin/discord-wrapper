@@ -21,3 +21,4 @@ bot.commands.addCommand({
     const awnsers = ['Yes', 'Not sure', 'No'];
     message.reply(awnsers[Math.round(Math.random() * awnsers.length)]);
 });
+```
