@@ -7,6 +7,7 @@ import Role, { permission } from './Role';
 export default class Member {
     private b: Bot;
 
+    guild?:        Guild;
     user?:         User;
     nick?:         string;
     roles:         Role[] = [];
@@ -19,6 +20,7 @@ export default class Member {
     constructor (data: any, guild: Guild | undefined, bot: Bot) {
         this.b = bot;
 
+        this.guild = guild;
         this.user = data.user ? new User(data.user, bot) : undefined;
         this.nick = data.nick;
         if (data.roles) data.roles.forEach((roleID: any) => {
