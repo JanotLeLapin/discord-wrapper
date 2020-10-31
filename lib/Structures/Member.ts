@@ -7,7 +7,7 @@ import Role, { permission, permissions } from './Role';
 const baseUrl = 'https://discord.com/api/guilds/';
 
 export default class Member {
-    private b: Bot;
+    protected b: Bot;
 
     guild?:        Guild;
     user?:         User;
