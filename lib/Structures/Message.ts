@@ -59,7 +59,7 @@ export default class Message {
         this.id = data.id;
         this.pinned = data.pinned;
         this.author = new User(data.author, bot);
-        this.member = new Member({ id: this.author.id }, bot);
+        this.member = new Member({ id: this.author.id }, this.channel.guild, bot);
         this.mentionRoles = data.mention_roles;
         this.content = data.content;
         this.channel = new TextChannel({ id: data.channel_id }, bot);
@@ -72,7 +72,7 @@ export default class Message {
                 this.channel = new TextChannel(channel, bot);
                 if (this.channel.guild) bot.request('GET', 'https://discord.com/api/guilds/' + this.channel.guild.id + '/members/' + this.author.id)
                     .then(member => {
-                        this.member = new Member(member, bot);
+                        this.member = new Member(member, this.channel.guild, bot);
                         if (bot.commands.commands.map(c => c.options.prefix).includes(this.content.split('').shift() || '')) {
                             const args = this.content.split(' ');
                             const command = args.shift()?.substring(1);

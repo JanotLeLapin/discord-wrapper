@@ -1,6 +1,7 @@
 import Bot from '../Bot/Bot';
 
 import User from './User';
+import Guild from './Guild';
 
 export default class Member {
     private b: Bot;
@@ -13,7 +14,7 @@ export default class Member {
     deaf:          boolean;
     mute:          boolean;
 
-    constructor (data: any, bot: Bot) {
+    constructor (data: any, guild: Guild | undefined, bot: Bot) {
         this.b = bot;
 
         this.user = data.user ? new User(data.user, bot) : undefined;
