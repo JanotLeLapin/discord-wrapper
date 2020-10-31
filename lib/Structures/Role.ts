@@ -67,6 +67,8 @@ export const permissions: permission[] = ['CREATE_INSTANT_INVITE'
 , 'MANAGE_EMOJIS'];
 
 export default class Role {
+    protected b: Bot;
+
     id:          string;
     name:        string;
     color:       number;
@@ -77,6 +79,8 @@ export default class Role {
     permissions: permission[] = [];
 
     constructor (data: any, guild: Guild, bot: Bot) {
+        this.b = bot;
+
         this.id = data.id;
         this.name = data.name;
         this.color = data.color;
