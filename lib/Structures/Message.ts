@@ -93,8 +93,14 @@ export default class Message {
     reply (message: string | Embed | EmbedObject): Promise<Message> {
         return new Promise((resolve, reject) => {
             let embed;
-            if (message instanceof Embed) embed = message.data;
-            else if (typeof message == 'object') embed = message;
+            if (message instanceof Embed) {
+                embed = message.data;
+                if (typeof embed.color == 'string') embed.color = parseInt(embed.color, 16);
+            }
+            else if (typeof message == 'object') {
+                embed = message;
+                if (typeof embed.color == 'string') embed.color = parseInt(embed.color, 16);
+            }
 
             this.b.request('POST', baseUrl + this.channel.id + '/messages', {
                 content: embed ? null : message,
