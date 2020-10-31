@@ -32,7 +32,7 @@ export type permission = 'CREATE_INSTANT_INVITE'
 | 'MANAGE_WEBHOOKS'
 | 'MANAGE_EMOJIS';
 
-const permissions: permission[] = ['CREATE_INSTANT_INVITE'
+export const permissions: permission[] = ['CREATE_INSTANT_INVITE'
 , 'KICK_MEMBERS'
 , 'BAN_MEMBERS'
 , 'ADMINISTRATOR'
