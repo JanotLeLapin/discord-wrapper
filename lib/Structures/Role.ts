@@ -106,4 +106,15 @@ export default class Role {
         });
     }
 
+    /**
+     * Update the role's color
+     * @param {number} color The new hex color for the role
+     */
+    setColor (color: string): Promise<Role> {
+        return new Promise((resolve, reject) => {
+            this.patch({ color: parseInt(color, 16) })
+                .then(role => resolve(role))
+                .catch(err => reject(err));
+        });
+    }
 }
