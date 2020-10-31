@@ -83,7 +83,7 @@ export default class Guild {
         this.widgetChannelID = data.widget_channel_id;
         this.verificationLevel = data.verification_level;
         if (data.roles) data.roles.forEach((role: any) => {
-            this.roles.push(new Role(role, bot));
+            this.roles.push(new Role(role, this, bot));
         });
         this.defaultMessageNotifications = data.default_message_notifications;
         this.mfaLevel = data.mfa_level;

@@ -1,5 +1,7 @@
 import Bot from '../Bot/Bot';
 
+import Guild from './Guild';
+
 export type permission = 'CREATE_INSTANT_INVITE'
 | 'KICK_MEMBERS'
 | 'BAN_MEMBERS'
@@ -69,15 +71,17 @@ export default class Role {
     name:        string;
     color:       number;
     position:    number;
+    guild:       Guild;
     managed:     boolean;
     mentionable: boolean;
     permissions: permission[] = [];
 
-    constructor (data: any, bot: Bot) {
+    constructor (data: any, guild: Guild, bot: Bot) {
         this.id = data.id;
         this.name = data.name;
         this.color = data.color;
         this.position = data.position;
+        this.guild = guild;
         this.managed = data.managed;
         this.mentionable = data.mentionable;
         for (let i = 0; i < permissions.length; i++) {
