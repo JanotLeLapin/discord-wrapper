@@ -2,6 +2,7 @@ const baseUrl = 'https://discord.com/api/channels/';
 
 import Bot from '../Bot/Bot';
 
+import { Guild } from '..';
 import Channel from './Channel';
 import Embed, { EmbedObject } from './Embed';
 import Message from './Message';
@@ -51,7 +52,7 @@ export class TextChannelBase extends Channel {
 }
 
 export default class TextChannel extends TextChannelBase {
-    guildID:              string;
+    guild?:               Guild;
     name:                 string;
     position:             number;
     permissionOverwrites: any[];
@@ -63,7 +64,7 @@ export default class TextChannel extends TextChannelBase {
     constructor (data: any, bot: Bot) {
         super(data, bot);
 
-        this.guildID = data.guild_id;
+        this.guild = bot.guilds.find(g => g.id === data.guild_id);
         this.name = data.name;
         this.position = data.position;
         this.permissionOverwrites = data.permission_overwrites;
