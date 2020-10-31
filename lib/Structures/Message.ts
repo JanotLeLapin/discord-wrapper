@@ -58,11 +58,11 @@ export default class Message {
         this.mentionEveryone = data.mention_everyone;
         this.id = data.id;
         this.pinned = data.pinned;
+        this.channel = new TextChannel({ id: data.channel_id }, bot);
         this.author = new User(data.author, bot);
         this.member = new Member({ id: this.author.id }, this.channel.guild, bot);
         this.mentionRoles = data.mention_roles;
         this.content = data.content;
-        this.channel = new TextChannel({ id: data.channel_id }, bot);
         this.mentions = data.mentions;
         this.type = data.type;
         this.messageReference = data.message_reference || {};
