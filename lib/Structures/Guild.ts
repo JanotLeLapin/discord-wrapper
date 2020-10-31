@@ -1,5 +1,3 @@
-import axios from 'axios';
-
 import Bot from '../Bot/Bot';
 
 import Member from './Member';
