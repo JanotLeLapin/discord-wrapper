@@ -123,7 +123,7 @@ export default class Guild {
             const update: any = {};
             if (data.name) update.name = data.name;
 
-            this.b.request('PATCH', this.id, update)
+            this.b.request('PATCH', baseUrl + this.id, update)
                 .then(res => {
                     const guild = new Guild(res, this.b);
                     this.b.guilds[this.b.guilds.indexOf(this)] = guild;
