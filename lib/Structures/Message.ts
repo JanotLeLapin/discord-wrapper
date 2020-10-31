@@ -20,9 +20,9 @@ export interface Emoji {
 }
 
 export interface CrosspostMessage {
-    channelId: string;
-    guildId:   string;
-    messageId: string;
+    channelID: string;
+    guildID:   string;
+    messageID: string;
 }
 
 
