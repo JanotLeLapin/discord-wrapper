@@ -70,7 +70,7 @@ export default class Message {
         bot.request('GET', baseUrl + this.channel.id)
             .then(channel => {
                 this.channel = new TextChannel(channel, bot);
-                bot.request('GET', 'https://discord.com/api/guilds/' + this.channel.guildID + '/members/' + this.author.id)
+                if (this.channel.guild) bot.request('GET', 'https://discord.com/api/guilds/' + this.channel.guild.id + '/members/' + this.author.id)
                     .then(member => {
                         this.member = new Member(member, bot);
                         if (bot.commands.commands.map(c => c.options.prefix).includes(this.content.split('').shift() || '')) {
