@@ -30,7 +30,7 @@ export class TextChannelBase extends Channel {
             })
                 .then(reply => resolve(new Message(reply, this.b)))
                 .catch(err => reject(err));
-        })
+        });
     }
 
     /**
@@ -46,7 +46,7 @@ export class TextChannelBase extends Channel {
                     .then(() => resolve())
                     .catch(err => reject(err)))
                 .catch(err => reject(err));
-        })
+        });
     }
 }
 
