@@ -59,6 +59,10 @@ export default class Member {
         });
     }
 
+    /**
+     * Updates the member's nickname
+     * @param {string} nick The new nickname for the member
+     */
     rename (nick: string): Promise<void> {
         return new Promise((resolve, reject) => {
             this.patch({ nick })
