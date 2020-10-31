@@ -1,5 +1,3 @@
-import Bot from './Bot';
-
 import Message from '../Structures/Message';
 
 type permission = 'CREATE_INSTANT_INVITE'
