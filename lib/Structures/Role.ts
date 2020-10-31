@@ -2,6 +2,8 @@ import Bot from '../Bot/Bot';
 
 import Guild from './Guild';
 
+const baseUrl = 'https://discord.com/api/guilds/';
+
 export type permission = 'CREATE_INSTANT_INVITE'
 | 'KICK_MEMBERS'
 | 'BAN_MEMBERS'
