@@ -110,6 +110,8 @@ export default class Bot {
                     }
                 });
                 connection.on('close', (code, desc) => {
+                    console.log(desc);
+                    console.log(code);
                     connection.close();
                     this.connect(token)
                         .then(() => {
