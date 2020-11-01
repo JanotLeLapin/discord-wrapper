@@ -46,6 +46,17 @@ export default class Member {
         return this.nick ? this.nick : this.user?.username;
     }
 
+    /**
+     * Removes the member from the server
+     */
+    kick () {
+        return new Promise((resolve, reject) => {
+            this.b.request('DELETE', baseUrl + this.guild?.id + '/members/' + this.user?.id)
+                .then(() => resolve())
+                .catch(err => reject(err));
+        });
+    }
+
     private patch = (data: any): Promise<void> => {
         return new Promise((resolve, reject) => {
             const update: any = {};
