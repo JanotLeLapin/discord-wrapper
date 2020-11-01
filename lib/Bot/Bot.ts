@@ -82,7 +82,7 @@ export default class Bot {
                     op: 2,
                     d: {
                         token: token,
-                        intents: 32509,
+                        intents: 16383,
                         properties: {
                             $os: 'linux',
                             $browser: 'disco',
