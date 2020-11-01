@@ -57,6 +57,23 @@ export default class Member {
         });
     }
 
+    /**
+     * Bans the member from the server
+     * @param {number} deleteMessageDays Number of days to delete messages for (0-7)
+     * @param {string} reason Reason for the ban
+     */
+    ban (deleteMessageDays?: number, reason?: string): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const update: any = {};
+            if (deleteMessageDays) update.delete_message_days = deleteMessageDays;
+            if (reason) update.reason = reason;
+
+            this.b.request('PUT', baseUrl + this.guild?.id + '/bans/' + this.user?.id, update)
+                .then(() => resolve())
+                .catch(err => reject(err));
+        });
+    }
+
     private patch = (data: any): Promise<void> => {
         return new Promise((resolve, reject) => {
             const update: any = {};
