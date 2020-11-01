@@ -2,7 +2,7 @@ const baseUrl = 'https://discord.com/api/channels/';
 
 import Bot from '../Bot/Bot';
 
-import { Guild } from '..';
+import Guild from './Guild';
 import Channel from './Channel';
 import Embed, { EmbedObject } from './Embed';
 import Message from './Message';
