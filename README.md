@@ -78,4 +78,6 @@ Sending an embed is as easy as sending a regular message:
 ```js
 channel.send(embed);
 ```
-![Result](https://www.mediafire.com/convkey/97f0/po9q97aoe3bvr8rzg.jpg)
+<p align="center" width="100%">
+    <img width="33%" src="https://www.mediafire.com/convkey/97f0/po9q97aoe3bvr8rzg.jpg">
+</p>
