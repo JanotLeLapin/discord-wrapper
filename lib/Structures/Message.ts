@@ -75,8 +75,8 @@ export default class Message {
                         this.member = new Member(member, this.channel.guild, bot);
                         if (bot.commands.commands.map(c => c.options.prefix).includes(this.content.split('').shift() || '')) {
                             const args = this.content.split(' ');
-                            const command = args.shift()?.substring(1);
-                            const cmd = bot.commands.commands.find(c => c.options.name === command);
+                            const command = args.shift();
+                            const cmd = bot.commands.commands.find(c => command?.endsWith(c.options.name) && command.startsWith(c.options.prefix) && command.length === (c.options.name + c.options.prefix).length);
                             if (cmd) cmd.run(this, args);
                         }
                         bot.emit('message', this);
