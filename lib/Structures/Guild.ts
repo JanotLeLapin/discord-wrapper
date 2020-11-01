@@ -111,8 +111,8 @@ export default class Guild {
                         const members: Member[] = r;
                         members.forEach(member => this.members.push(new Member(member, this, bot)));
 
-                bot.guilds.push(this);
-                bot.emit('guildCreate', this);
+                        bot.guilds.push(this);
+                        bot.emit('guildCreate', this);
                     })
                     .catch(err => { throw err });
             })
