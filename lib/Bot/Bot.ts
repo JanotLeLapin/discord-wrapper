@@ -75,7 +75,7 @@ export default class Bot {
             if (this.connection && this.connection.connected) return reject('Already authenticated.');
             this.token = token;
             const client = new WebSocketClient()
-            client.connect('wss://gateway.discord.gg/?v=6&encoding=json');
+            client.connect('wss://gateway.discord.gg/?v=8&encoding=json');
             client.on('connect', connection => {
                 this.connection = connection;
                 connection.send(JSON.stringify({
