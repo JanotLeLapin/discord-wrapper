@@ -106,9 +106,17 @@ export default class Guild {
                 const channels: TextChannel[] = res;
                 channels.forEach(channel => this.channels.push(new TextChannel(channel, bot)));
 
+                bot.request('GET', baseUrl + this.id + '/members')
+                    .then(r => {
+                        const members: Member[] = r;
+                        members.forEach(member => this.members.push(new Member(member, this, bot)));
+
                 bot.guilds.push(this);
                 bot.emit('guildCreate', this);
-            });
+                    })
+                    .catch(err => { throw err });
+            })
+            .catch(err => { throw err });
     }
 
     /**
