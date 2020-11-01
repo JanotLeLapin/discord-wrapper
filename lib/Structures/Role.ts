@@ -130,7 +130,7 @@ export default class Role {
      */
     setColor (color: string): Promise<Role> {
         return new Promise((resolve, reject) => {
-            this.patch({ color: parseInt(color, 16) })
+            this.patch({ color: parseInt(color.replace('#', ''), 16) })
                 .then(role => resolve(role))
                 .catch(err => reject(err));
         });
